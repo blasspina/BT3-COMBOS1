@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BT3 Online — Scouter & Guía de Combate</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Chakra+Petch:ital,wght@0,600;0,700;1,700;1,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Chakra Petch"', 'sans-serif'],
+            comic: ['"Bangers"', 'cursive'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            dbz: {
+              orange: '#FF7A00',
+              amber: '#FFC700',
+              gold: '#FFE600',
+              ki: '#38BDF8',
+              scouter: '#22C55E',
+              danger: '#F43F5E'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Fondo estilo Dragon Ball Legends: Carbono oscuro + Trama Halftone de Manga + Resplandor Dorado */
+    body {
+      background-color: #121318;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(255, 184, 0, 0.22), transparent 45%),
+        radial-gradient(circle at 15% 35%, rgba(255, 107, 0, 0.14), transparent 40%),
+        radial-gradient(rgba(255, 199, 0, 0.08) 1.5px, transparent 1.5px),
+        radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 16px 16px, 8px 8px;
+      background-position: 0 0, 0 0, 0 0, 4px 4px;
+    }
+
+    /* Trama de puntos amarilla/naranja estilo cartel de Dokkan / Legends */
+    .halftone-gold {
+      background-color: #181612;
+      background-image: 
+        linear-gradient(135deg, rgba(255, 199, 0, 0.20) 0%, rgba(255, 107, 0, 0.06) 60%, rgba(18, 19, 24, 0.95) 100%),
+        radial-gradient(rgba(255, 199, 0, 0.22) 1.5px, transparent 1.5px);
+      background-size: 100% 100%, 10px 10px;
+    }
+
+    /* Botón Dorado Biselado estilo menú de DB Legends (Train, PvP, Summon) */
+    .dbl-gold-btn {
+      background: linear-gradient(180deg, #FFE55C 0%, #F59E0B 55%, #D97706 100%);
+      color: #1A1105;
+      border: 2px solid #FFF3A1;
+      box-shadow: 0 4px 0 #78350F, 0 6px 14px rgba(0, 0, 0, 0.65), inset 0 2px 1px rgba(255, 255, 255, 0.65);
+      clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px), 0% 8px);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+      transition: all 0.15s ease;
+    }
+    .dbl-gold-btn:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+    .dbl-gold-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #78350F, 0 2px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Botón Plateado Metálico estilo barra superior de DB Legends (News, Item, Party Formation) */
+    .dbl-silver-btn {
+      background: linear-gradient(180deg, #F8FAFC 0%, #CBD5E1 52%, #94A3B8 100%);
+      color: #0F172A;
+      border: 2px solid #334155;
+      box-shadow: 0 3px 0 #0F172A, 0 5px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      clip-path: polygon(6px 0%, calc(100% - 6px) 0%, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0% calc(100% - 6px), 0% 6px);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+      transition: all 0.15s ease;
+    }
+    .dbl-silver-btn:hover {
+      background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 55%, #CBD5E1 100%);
+      transform: translateY(-1px);
+    }
+
+    /* Botón Azul Esquina estilo DB Legends (Menu / Casa) */
+    .dbl-blue-btn {
+      background: linear-gradient(180deg, #38BDF8 0%, #0284C7 55%, #0369A1 100%);
+      color: #FFFFFF;
+      border: 2px solid #BAE6FD;
+      box-shadow: 0 3px 0 #082F49, 0 5px 12px rgba(2, 132, 199, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      clip-path: polygon(6px 0%, calc(100% - 6px) 0%, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0% calc(100% - 6px), 0% 6px);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Marco de Tarjeta estilo SPARKING / LEGENDS LIMITED */
+    .dbl-card {
+      background: linear-gradient(180deg, #1E1F26 0%, #14151A 100%);
+      border: 2px solid #F59E0B;
+      box-shadow: 0 0 0 1px #000000, 0 8px 20px rgba(0, 0, 0, 0.75), inset 0 0 18px rgba(245, 158, 11, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .dbl-card-main {
+      border: 2px solid #FFE600;
+      box-shadow: 0 0 0 1px #000000, 0 0 22px rgba(255, 199, 0, 0.25), inset 0 0 22px rgba(255, 199, 0, 0.12);
+    }
+
+    /* Texto con borde negro grueso estilo "500+ FIGHTERS" / "SPARKING" */
+    .db-comic-text {
+      background: linear-gradient(180deg, #FFF066 0%, #FF9900 55%, #FF4500 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 0 #000000) drop-shadow(2px 0 0 #000000) drop-shadow(-2px 0 0 #000000) drop-shadow(0 -2px 0 #000000);
+    }
+
+    /* Barra Scouter Verde estilo Power Level de la captura 2 */
+    .scouter-bar {
+      background: linear-gradient(90deg, rgba(20, 83, 45, 0.9) 0%, rgba(22, 101, 52, 0.65) 60%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1.5px solid #4ADE80;
+      box-shadow: inset 0 0 10px rgba(74, 222, 128, 0.35), 0 0 8px rgba(34, 197, 94, 0.25);
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    }
+
+    /* Botones clásicos de PS2 para lectura rápida en partida */
+    .ps-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.65rem;
+      height: 1.65rem;
+      padding: 0 0.35rem;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 0.8rem;
+      line-height: 1;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.35), 0 2px 4px rgba(0,0,0,0.75);
+      user-select: none;
+    }
+    .ps-sq { background: #2b142c; color: #ff85c0; border: 2px solid #f472b6; }
+    .ps-tr { background: #0f2922; color: #4ade80; border: 2px solid #22c55e; }
+    .ps-ci { background: #33141b; color: #fda4af; border: 2px solid #fb7185; }
+    .ps-cr { background: #14243b; color: #93c5fd; border: 2px solid #60a5fa; }
+    .ps-sh {
+      border-radius: 0.375rem;
+      background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+      color: #f8fafc;
+      border: 1.5px solid #94a3b8;
+      font-size: 0.72rem;
+      padding: 0 0.45rem;
+    }
+
+    /* Tags de extensiones de combo con estética de carta DB */
+    .ext-rh { background: linear-gradient(90deg, rgba(245, 158, 11, 0.28), rgba(217, 119, 6, 0.15)); color: #fde047; border: 1px solid #f59e0b; }
+    .ext-hf { background: linear-gradient(90deg, rgba(244, 63, 94, 0.28), rgba(225, 29, 72, 0.15)); color: #fda4af; border: 1px solid #fb7185; }
+    .ext-kc { background: linear-gradient(90deg, rgba(56, 189, 248, 0.28), rgba(2, 132, 199, 0.15)); color: #7dd3fc; border: 1px solid #38bdf8; }
+    .ext-fk { background: linear-gradient(90deg, rgba(168, 85, 247, 0.28), rgba(147, 51, 234, 0.15)); color: #d8b4fe; border: 1px solid #c084fc; }
+
+    /* Ocultar barra de scroll en pestañas móviles */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="text-slate-100 font-sans antialiased min-h-screen pb-24 selection:bg-amber-400 selection:text-black">
+
+  <!-- BARRA SUPERIOR ESTILO DRAGON BALL LEGENDS (PARTY FORMATION / POWER LEVEL) -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-[#121318]/95 border-b-2 border-amber-500/70 shadow-2xl">
+    <!-- Tira superior de Power Level y Ability Bonus idéntica a la captura 2 -->
+    <div class="bg-gradient-to-r from-black via-slate-900 to-black border-b border-slate-800 px-4 py-1.5">
+      <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="font-display font-bold uppercase tracking-wider text-slate-300">Power Level</span>
+          <div class="scouter-bar px-3 py-0.5 flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-sm bg-emerald-400 animate-pulse shadow-[0_0_6px_#4ade80]"></span>
+            <span class="font-mono font-extrabold text-emerald-300 tracking-wider text-xs sm:text-sm">4,143,719</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-1.5">
+            <span class="font-display font-bold uppercase tracking-wider text-slate-300">Win Bonus</span>
+            <span class="font-mono font-extrabold text-amber-400 text-xs sm:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">3693.28%</span>
+          </div>
+          <span class="hidden sm:inline-block px-2 py-0.5 rounded bg-amber-500/20 border border-amber-400/50 text-[10px] font-mono font-bold text-amber-300 uppercase">
+            BT3 USA Vanilla • PS2 Pad
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Logo con Esfera del Dragón de 4 Estrellas -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-yellow-300 via-amber-500 to-orange-600 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.6)] border-2 border-yellow-200 relative shrink-0">
+          <!-- Estrellas rojas de la esfera de 4 estrellas -->
+          <svg class="w-7 h-7 text-red-600 drop-shadow" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.5 5.5L8.2 7.2L10 7.4L8.6 8.6L9 10.3L7.5 9.3L6 10.3L6.4 8.6L5 7.4L6.8 7.2L7.5 5.5Z"/>
+            <path d="M16.5 5.5L17.2 7.2L19 7.4L17.6 8.6L18 10.3L16.5 9.3L15 10.3L15.4 8.6L14 7.4L15.8 7.2L16.5 5.5Z"/>
+            <path d="M7.5 13.5L8.2 15.2L10 15.4L8.6 16.6L9 18.3L7.5 17.3L6 18.3L6.4 16.6L5 15.4L6.8 15.2L7.5 13.5Z"/>
+            <path d="M16.5 13.5L17.2 15.2L19 15.4L17.6 16.6L18 18.3L16.5 17.3L15 18.3L15.4 16.6L14 15.4L15.8 15.2L16.5 13.5Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display font-extrabold italic text-xl sm:text-2xl tracking-wider uppercase db-comic-text">
+              BT3 LEGENDS SCOUTER
+            </h1>
+          </div>
+          <p class="text-xs text-amber-200/80 font-medium hidden sm:block">Machete competitivo de Extensiones, Defensa y Personajes Sparking</p>
+        </div>
+      </div>
+
+      <!-- Botones rápidos estilo DB Legends (Plateado y Azul como el menú de tus fotos) -->
+      <div class="flex items-center gap-2.5">
+        <button id="btnBrotherMode" onclick="toggleBrotherModal()" class="dbl-gold-btn px-3.5 py-1.5 font-display font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+          <span>⚡</span>
+          <span>Modo Hermano (30s)</span>
+        </button>
+        <button onclick="copyShareText()" id="btnCopyShare" class="dbl-blue-btn px-3.5 py-1.5 font-display font-extrabold text-xs uppercase tracking-wider cursor-pointer" title="Copiar resumen para WhatsApp">
+          📲 WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- NAVEGACIÓN DE LAS 4 SECCIONES CON BOTONES DORADOS Y PLATEADOS -->
+    <nav class="max-w-6xl mx-auto px-4 overflow-x-auto no-scrollbar border-t border-amber-500/20 bg-black/40">
+      <div class="flex items-center gap-2 py-2.5 min-w-max">
+        <button onclick="switchTab('tab-fighters')" id="nav-tab-fighters" class="tab-btn dbl-gold-btn px-4 py-2 font-display font-extrabold italic text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer">
+          <span>🔥</span> 1. Personajes Sparking
+        </button>
+        <button onclick="switchTab('tab-combos')" id="nav-tab-combos" class="tab-btn dbl-silver-btn px-4 py-2 font-display font-extrabold italic text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer">
+          <span>🥊</span> 2. Regla de Combos
+        </button>
+        <button onclick="switchTab('tab-defense')" id="nav-tab-defense" class="tab-btn dbl-silver-btn px-4 py-2 font-display font-extrabold italic text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer">
+          <span>🛡️</span> 3. Defensa & Contras
+        </button>
+        <button onclick="switchTab('tab-movement')" id="nav-tab-movement" class="tab-btn dbl-silver-btn px-4 py-2 font-display font-extrabold italic text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer">
+          <span>💨</span> 4. Movimiento & Party DP
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-6xl mx-auto px-4 pt-6">
+
+    <!-- ==========================================
+         SECCIÓN 1: FICHAS RÁPIDAS DE PERSONAJES
+         ========================================== -->
+    <section id="tab-fighters" class="tab-panel space-y-6">
+      <!-- Leyenda rápida de extensiones con estética dorada/manga -->
+      <div class="p-3.5 rounded-xl halftone-gold border-2 border-amber-500/60 shadow-lg flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-xs text-amber-100">
+          <span class="font-display font-bold uppercase tracking-wider text-amber-300">Código de Extensiones (<span class="ps-btn ps-tr !w-5 !h-5 !min-w-0 !text-[10px]">△</span> tras <span class="ps-btn ps-sq !w-5 !h-5 !min-w-0 !text-[10px]">□</span>):</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="px-2.5 py-1 rounded-md ext-rh font-bold">🔄 Rolling Hammer (Da vuelta)</span>
+          <span class="px-2.5 py-1 rounded-md ext-hf font-bold">💥 Heavy Finish (Aturde panza)</span>
+          <span class="px-2.5 py-1 rounded-md ext-kc font-bold">💨 Kiai Cannon (Empuja)</span>
+          <span class="px-2.5 py-1 rounded-md ext-fk font-bold">🦵 Flying Kick (Patada múltiple)</span>
+        </div>
+      </div>
+
+      <!-- Barra de búsqueda y filtros estilo botones de menú de DB Legends -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div class="relative flex-1">
+          <input 
+            type="text" 
+            id="searchFighter" 
+            oninput="renderFighters()" 
+            placeholder="Buscar guerrero (ej. Kid Buu, Gogeta, Broly, Cell...)" 
+            class="w-full bg-[#14151A] border-2 border-amber-500/50 focus:border-yellow-300 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-400 outline-none transition shadow-inner"
+          />
+          <span class="absolute right-3.5 top-2.5 text-amber-400 text-sm">🔍</span>
+        </div>
+
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+          <button onclick="setFilter('all')" data-filter="all" class="filter-chip dbl-gold-btn px-3.5 py-2 text-xs font-display font-extrabold uppercase cursor-pointer shrink-0">
+            Todos (10)
+          </button>
+          <button onclick="setFilter('mains')" data-filter="mains" class="filter-chip dbl-silver-btn px-3.5 py-2 text-xs font-display font-extrabold uppercase cursor-pointer shrink-0">
+            ⭐ Tus Mains
+          </button>
+          <button onclick="setFilter('god')" data-filter="god" class="filter-chip dbl-silver-btn px-3.5 py-2 text-xs font-display font-extrabold uppercase cursor-pointer shrink-0">
+            👑 Legends Limited (Z+)
+          </button>
+          <button onclick="setFilter('fullset')" data-filter="fullset" class="filter-chip dbl-silver-btn px-3.5 py-2 text-xs font-display font-extrabold uppercase cursor-pointer shrink-0">
+            🛠️ Set 4 Extensiones
+          </button>
+        </div>
+      </div>
+
+      <!-- Grilla de tarjetas de personajes -->
+      <div id="fightersGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Renderizado dinámico por JS -->
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECCIÓN 2: REGLA DE ORO DE LOS COMBOS
+         ========================================== -->
+    <section id="tab-combos" class="tab-panel hidden space-y-6">
+      <div class="p-5 sm:p-6 rounded-2xl halftone-gold border-2 border-amber-400 shadow-2xl">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+          <div>
+            <span class="px-2.5 py-0.5 rounded bg-amber-400 text-black text-xs font-display font-extrabold uppercase tracking-widest">
+              ★ Mecánica Fundamental del BT3 ★
+            </span>
+            <h2 class="font-display font-extrabold italic text-2xl sm:text-3xl db-comic-text mt-1">
+              ¿POR QUÉ EL RIVAL SALE VOLANDO ANTES DE TIEMPO?
+            </h2>
+          </div>
+          <div class="px-3.5 py-2.5 rounded-xl bg-black/80 border-2 border-rose-500 text-rose-200 text-xs max-w-xs shadow-lg">
+            <strong class="text-rose-400 uppercase font-display">¡Regla #1!</strong> Si repetís el mismo ataque de extensión (<span class="ps-btn ps-tr !w-4 !h-4 !min-w-0 !text-[10px]">△</span>) 2 veces en el mismo combo, <strong>el juego corta la cadena</strong> y manda a volar al rival.
+          </div>
+        </div>
+
+        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+          En BT3 no gana el que aprieta <span class="ps-btn ps-sq">□</span> a lo loco. Si pegás 5 veces con <span class="ps-btn ps-sq">□</span> terminás el combo básico y lo empujás lejos. El secreto es <strong>intercalar las 4 extensiones con <span class="ps-btn ps-tr">△</span> sin repetir ninguna</strong> antes de que llegue el 5to golpe.
+        </p>
+
+        <!-- RUTA UNIVERSAL PASO A PASO -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-amber-500/40 relative">
+            <div class="text-[11px] font-mono text-amber-400 uppercase font-bold mb-1">Paso 1 • Darlo vuelta</div>
+            <div class="font-display font-bold text-base text-white mb-2">Rolling Hammer</div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Dejás al rival <strong>de espaldas</strong>. Ahora recibe más daño y no puede usar Z-Counter frontal ni cubrirse.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-rose-500/40 relative">
+            <div class="text-[11px] font-mono text-rose-400 uppercase font-bold mb-1">Paso 2 • Aturdir</div>
+            <div class="font-display font-bold text-base text-white mb-2">Heavy Finish</div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Golpe seco al estómago que lo deja <strong>doblado del dolor</strong> durante más de un segundo entero.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-sky-500/40 relative">
+            <div class="text-[11px] font-mono text-sky-400 uppercase font-bold mb-1">Paso 3 • Empujar</div>
+            <div class="font-display font-bold text-base text-white mb-2">Kiai Cannon</div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Onda de aire con la mano que lo empuja aturdido pero permite perseguirlo al instante con <span class="ps-btn ps-cr !w-4 !h-4 !min-w-0 !text-[10px]">✕</span>.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-purple-500/40 relative">
+            <div class="text-[11px] font-mono text-purple-400 uppercase font-bold mb-1">Paso 4 • Persecución</div>
+            <div class="font-display font-bold text-base text-white mb-2">Flying Kick / Barrido</div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Tras perseguir con <span class="ps-btn ps-cr !w-4 !h-4 !min-w-0 !text-[10px]">✕</span>, cerrás con patada aérea o levantándolo con <span class="ps-btn ps-sh">Arriba + △</span>.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-gradient-to-b from-orange-500/20 to-slate-950/90 border border-dbz-orange relative">
+            <div class="text-[11px] font-mono text-dbz-orange uppercase font-bold mb-1">Paso 5 • Remate</div>
+            <div class="font-display font-bold text-base text-white mb-2">Blast 2 Seguro</div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Con el rival volando en diagonal o aturdido, tirás tu Súper (<span class="ps-btn ps-sh">L2 + △</span>) y entra 100% confirmado.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRADUCTOR INTERACTIVO DE COMBO SEGÚN TU PERSONAJE -->
+      <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/90 border border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h3 class="font-display font-bold text-lg text-white">
+              🎮 Simulador de Botones Exactos por Personaje
+            </h3>
+            <p class="text-xs text-slate-400">
+              Elegí quién estás usando y mirá exactamente cuántos <span class="ps-btn ps-sq !w-4 !h-4 !min-w-0 !text-[10px]">□</span> tenés que tocar antes de cada <span class="ps-btn ps-tr !w-4 !h-4 !min-w-0 !text-[10px]">△</span>:
+            </p>
+          </div>
+          <select id="comboSelectFighter" onchange="updateInteractiveCombo()" class="bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-sm font-semibold text-amber-400 outline-none focus:border-dbz-orange cursor-pointer">
+            <!-- Opciones cargadas por JS -->
+          </select>
+        </div>
+
+        <div id="interactiveComboDisplay" class="p-4 rounded-xl bg-slate-950 border border-slate-800/90 space-y-3">
+          <!-- Renderizado por JS -->
+        </div>
+      </div>
+
+      <!-- EXTENSIONES UNIVERSALES (Las tienen TODOS los personajes) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-display font-bold text-white">Lift Strike (Levantar)</span>
+            <div class="flex items-center gap-1">
+              <span class="ps-btn ps-sq">□</span>
+              <span class="text-xs text-slate-500">x1-4 +</span>
+              <span class="ps-btn ps-sh">▲ Arriba</span>
+              <span class="ps-btn ps-tr">△</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400">
+            Lo patea hacia arriba dejándolo indefenso en el aire. Tocá <span class="ps-btn ps-cr !w-5 !h-5 !min-w-0">✕</span> para perseguirlo al instante y seguir pegando.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-display font-bold text-white">Ground Slash (Barrido)</span>
+            <div class="flex items-center gap-1">
+              <span class="ps-btn ps-sq">□</span>
+              <span class="text-xs text-slate-500">x1-4 +</span>
+              <span class="ps-btn ps-sh">▼ Abajo</span>
+              <span class="ps-btn ps-tr">△</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400">
+            Le barre las piernas y rompe la guardia si estaba cubriéndose parado. No cuenta como repetición de tus otras extensiones.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-display font-bold text-white">Step-In (Reinicio Corto)</span>
+            <div class="flex items-center gap-1">
+              <span class="ps-btn ps-sq">□</span>
+              <span class="text-xs text-slate-500">x4 +</span>
+              <span class="ps-btn ps-cr">✕</span>
+              <span class="text-xs text-slate-500">+</span>
+              <span class="ps-btn ps-sq">□</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400">
+            En vez de hacer el 5to golpe que lo manda a volar, das un pasito corto hacia adelante con <span class="ps-btn ps-cr !w-5 !h-5 !min-w-0">✕</span> y arrancás otra tira de golpes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECCIÓN 3: GUÍA DE SUPERVIVENCIA ONLINE
+         ========================================== -->
+    <section id="tab-defense" class="tab-panel hidden space-y-6">
+      <!-- ALERTA PRINCIPAL: QUÉ HACER CUANDO TE DAN DE ESPALDAS -->
+      <div class="p-5 rounded-2xl bg-gradient-to-r from-rose-950/60 via-slate-900 to-slate-900 border border-rose-500/40">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <span class="px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-xs font-mono uppercase font-semibold">
+              🚨 Emergencia Online #1: "Me dieron vuelta y no puedo salir"
+            </span>
+            <h2 class="font-display font-bold text-xl sm:text-2xl text-white">
+              Onda Explosiva de Emergencia (Emergency Blaster Wave)
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+              Cuando te meten un <em>Rolling Hammer</em> y te empiezan a pegar por la espalda, el bloqueo común no sirve. Tenés dos salidas inmediatas para no perder una barra entera de vida:
+            </p>
+          </div>
+          <div class="flex flex-col gap-2 shrink-0 bg-slate-950/90 p-3.5 rounded-xl border border-rose-500/30">
+            <div class="flex items-center justify-between gap-4">
+              <span class="text-xs text-slate-300">Opción A (Gasta un poquito de Vida):</span>
+              <div class="flex items-center gap-1">
+                <span class="ps-btn ps-sh">L1</span>
+                <span class="text-xs text-slate-400">+</span>
+                <span class="ps-btn ps-sh">L1</span>
+                <span class="text-[11px] text-slate-400 ml-1">(Doble tap rápido)</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-4 border-t border-slate-800 pt-2">
+              <span class="text-xs text-slate-300">Opción B (Usa 1 Blast Stock):</span>
+              <div class="flex items-center gap-1">
+                <span class="ps-btn ps-sh">R3</span>
+                <span class="text-[11px] text-amber-300 ml-1">(Si tenés Barrera / Explosive Wave)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAS 4 MECÁNICAS DEFENSIVAS CLAVE -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase text-emerald-400 font-bold">Defensa Activa #1</span>
+            <div class="flex items-center gap-1.5">
+              <span class="ps-btn ps-sh">▲ Arriba</span>
+              <span class="text-xs text-slate-400">+</span>
+              <span class="ps-btn ps-sq">□</span>
+              <span class="text-xs text-slate-500">(Justo al impacto)</span>
+            </div>
+          </div>
+          <h3 class="font-display font-bold text-lg text-white">Z-Counter (Contraataque Z)</h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Incluso si ya te están pegando de frente, apretá <span class="ps-btn ps-sh">▲ Arriba</span> + <span class="ps-btn ps-sq !w-5 !h-5 !min-w-0">□</span> en el frame exacto en que entra el siguiente puño (especialmente fácil contra golpes pesados o el 5to golpe). Tu personaje frena el golpe en seco y lo manda a volar.
+          </p>
+          <div class="p-2.5 rounded-lg bg-slate-950 text-[11px] text-slate-400 border border-slate-800/80">
+            💡 <strong>Tip Online:</strong> No ametralles el botón porque tiene enfriamiento. Intentá medirlo cuando el rival carga un <em>Heavy Finish</em> o <em>Rolling Hammer</em>.
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase text-sky-400 font-bold">Defensa Activa #2</span>
+            <div class="flex items-center gap-1.5">
+              <span class="ps-btn ps-ci">○</span>
+              <span class="text-xs text-slate-500">(Un instante antes del golpe)</span>
+            </div>
+          </div>
+          <h3 class="font-display font-bold text-lg text-white">Teletransportación (Vanish)</h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Apretando <span class="ps-btn ps-ci !w-5 !h-5 !min-w-0">○</span> justo antes de que te toque un golpe fuerte, un agarre o un Kamehameha/Blast 2, desaparecés y aparecés en la espalda del rival. Consume un poquito de Ki.
+          </p>
+          <div class="p-2.5 rounded-lg bg-slate-950 text-[11px] text-slate-400 border border-slate-800/80">
+            💡 <strong>Tip Online:</strong> Si hay un poquito de delay en Android, apretalo una fracción de segundo <em>antes</em> de lo que harías offline en la PS2.
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase text-amber-400 font-bold">Defensa Activa #3</span>
+            <div class="flex items-center gap-1.5">
+              <span class="ps-btn ps-ci">○</span>
+              <span class="text-xs text-slate-400">+</span>
+              <span class="ps-btn ps-tr">△</span>
+              <span class="text-xs text-slate-500">(Mientras mantenés guardia)</span>
+            </div>
+          </div>
+          <h3 class="font-display font-bold text-lg text-white">Sonic Sway (Esquive Ráfaga)</h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Si estás cubriéndote con <span class="ps-btn ps-ci !w-5 !h-5 !min-w-0">○</span> y el rival viene a pegarte <span class="ps-btn ps-sq !w-5 !h-5 !min-w-0">□</span> predeciblemente, tocá <span class="ps-btn ps-tr !w-5 !h-5 !min-w-0">△</span> + dirección. Tu personaje esquiva todos los golpes en el lugar como en la serie y le vacía media barra de Ki al rival.
+          </p>
+          <div class="p-2.5 rounded-lg bg-slate-950 text-[11px] text-slate-400 border border-slate-800/80">
+            💡 <strong>Castigo inmediato:</strong> Apenas termina la animación del esquive, meté <span class="ps-btn ps-sq !w-4 !h-4 !min-w-0 !text-[10px]">□</span> o un Blast 2 directo.
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase text-purple-400 font-bold">Romper Tortugas #4</span>
+            <div class="flex items-center gap-1.5">
+              <span class="ps-btn ps-sh">▼ Abajo</span>
+              <span class="text-xs text-slate-400">+</span>
+              <span class="ps-btn ps-sq">□</span>
+              <span class="text-xs text-slate-500">(Mantener cargado)</span>
+            </div>
+          </div>
+          <h3 class="font-display font-bold text-lg text-white">Cómo abrir al que vive cubierto</h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            En BT3 tenés 3 niveles de guardia (Media, Alta y Baja). Si el rival sólo aprieta <span class="ps-btn ps-ci !w-5 !h-5 !min-w-0">○</span> neutro, <strong>su guardia es Media</strong>:
+          </p>
+          <ul class="text-xs text-slate-300 space-y-1.5">
+            <li>• <strong>Golpe Bajo Cargado (<span class="ps-btn ps-sh">▼ Abajo</span> + <span class="ps-btn ps-sq !w-4 !h-4 !min-w-0 !text-[10px]">□</span> mantenido):</strong> Pasa directo por abajo de la guardia normal y lo deja regalado.</li>
+            <li>• <strong>Golpe Alto Cargado (<span class="ps-btn ps-sh">▲ Arriba</span> + <span class="ps-btn ps-sq !w-4 !h-4 !min-w-0 !text-[10px]">□</span> mantenido):</strong> Rompe la guardia si el rival se cubre agachado.</li>
+            <li>• <strong>Kiai Cannon o Agarre (<span class="ps-btn ps-cr !w-4 !h-4 !min-w-0 !text-[10px]">✕</span> + <span class="ps-btn ps-ci !w-4 !h-4 !min-w-0 !text-[10px]">○</span>):</strong> El Kiai Cannon rompe la postura si no lo bloquea en la dirección correcta.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECCIÓN 4: MOVIMIENTO AVANZADO & EQUIPOS DP
+         ========================================== -->
+    <section id="tab-movement" class="tab-panel hidden space-y-6">
+      <!-- TRUCOS DE MOVIMIENTO -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5">
+          <span class="text-[11px] font-mono uppercase text-dbz-orange font-bold">Movimiento Pro #1</span>
+          <h3 class="font-display font-bold text-lg text-white">Dragon Dash Cancel</h3>
+          <div class="flex items-center gap-1 py-1">
+            <span class="ps-btn ps-sh">L2</span>
+            <span class="text-xs text-slate-500">+</span>
+            <span class="ps-btn ps-cr">✕</span>
+            <span class="text-xs text-slate-400 mx-1">➔</span>
+            <span class="ps-btn ps-sh">▼ Abajo</span>
+            <span class="text-xs text-slate-500">+</span>
+            <span class="ps-btn ps-ci">○</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Si volás directo hasta chocar al rival, te van a recibir con un Kamehameha o un paso al costado. Frená en seco con guardia un metro antes de tocarlo para ganar la espalda o forzar su error.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5">
+          <span class="text-[11px] font-mono uppercase text-sky-400 font-bold">Movimiento Pro #2</span>
+          <h3 class="font-display font-bold text-lg text-white">Step-In Sway (Flanqueo)</h3>
+          <div class="flex items-center gap-1 py-1">
+            <span class="ps-btn ps-sh">◄ / ►</span>
+            <span class="text-xs text-slate-500">+</span>
+            <span class="ps-btn ps-cr">✕</span>
+            <span class="text-xs text-slate-400 mx-1">➔</span>
+            <span class="ps-btn ps-ci">○</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Hacés el dash corto de costado y apretás <span class="ps-btn ps-ci !w-4 !h-4 !min-w-0 !text-[10px]">○</span> durante el deslizamiento. Tu personaje hace una curva rápida que esquiva ráfagas de Ki y te deja pegado al costado del rival.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5">
+          <span class="text-[11px] font-mono uppercase text-emerald-400 font-bold">Movimiento Pro #3</span>
+          <h3 class="font-display font-bold text-lg text-white">Cancelar Golpe Cargado</h3>
+          <div class="flex items-center gap-1 py-1">
+            <span class="ps-btn ps-sq">□</span>
+            <span class="text-[11px] text-slate-400">(Mantenido)</span>
+            <span class="text-xs text-slate-400 mx-1">➔</span>
+            <span class="ps-btn ps-ci">○</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Amagás que vas a tirar un golpe pesado manteniendo <span class="ps-btn ps-sq !w-4 !h-4 !min-w-0 !text-[10px]">□</span> para que el rival intente hacer Z-Counter, pero tocás <span class="ps-btn ps-ci !w-4 !h-4 !min-w-0 !text-[10px]">○</span> para cancelarlo y le pegás gratis cuando falla su contra.
+          </p>
+        </div>
+      </div>
+
+      <!-- ARMADOR DE EQUIPOS DP (15 Y 20 PUNTOS) -->
+      <div class="p-5 sm:p-6 rounded-2xl halftone-gold border-2 border-amber-400 space-y-5 shadow-2xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="px-2 py-0.5 rounded bg-amber-400 text-black text-xs font-display font-extrabold uppercase">
+              Party Formation • Sin Objetos Z
+            </span>
+            <h3 class="font-display font-extrabold italic text-xl sm:text-2xl db-comic-text mt-1">
+              ARMADOR DE PARTY POR PUNTOS (15 / 20 DP)
+            </h3>
+            <p class="text-xs text-amber-100/80 mt-0.5">
+              En el online estándar no valen los Potara Azules. Se juega por límite de <strong>15 DP</strong> o <strong>20 DP</strong>. Probá armar tu formación acá:
+            </p>
+          </div>
+          <div class="flex items-center gap-2 bg-black/90 p-2.5 rounded-xl border-2 border-emerald-400/70">
+            <span class="text-xs font-display font-bold uppercase text-slate-300">Costo Party:</span>
+            <span id="dpCounter" class="font-mono font-extrabold text-lg text-emerald-400">0 / 15 DP</span>
+            <button onclick="clearTeam()" class="dbl-silver-btn px-2.5 py-1 text-xs font-display font-extrabold uppercase cursor-pointer">
+              Reiniciar
+            </button>
+          </div>
+        </div>
+
+        <!-- Botones para sumar al equipo de prueba -->
+        <div id="dpSelectorPool" class="flex flex-wrap gap-2">
+          <!-- Renderizado por JS -->
+        </div>
+
+        <!-- Equipo actual seleccionado -->
+        <div id="dpCurrentTeam" class="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 min-h-[56px] flex flex-wrap items-center gap-2">
+          <span class="text-xs text-slate-500">Tocá los personajes de arriba para sumarlos y medir tus puntos de DP...</span>
+        </div>
+
+        <!-- 3 Equipos Meta prearmados listos para usar -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+          <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="font-display font-bold text-sm text-amber-400">Equipo "Tus Mains" (15 DP)</span>
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">15 DP Exactos</span>
+            </div>
+            <p class="text-xs text-slate-300 font-medium">Kid Buu (7) + Super Baby 2 (6) + Maestro Roshi Max (2)</p>
+            <p class="text-[11px] text-slate-400 mt-1">Tenés regeneración con Kid Buu, presión de lejos con Baby y un tanque barato de 2 puntos para cerrar.</p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="font-display font-bold text-sm text-sky-400">Fusión en Partida (15 DP)</span>
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-sky-500/15 text-sky-300">15 DP Exactos</span>
+            </div>
+            <p class="text-xs text-slate-300 font-medium">Gokú Fin Base (5) + Vegeta 2da Forma (5) + Burter (5)</p>
+            <p class="text-[11px] text-slate-400 mt-1">Arrancás con Burter y después fusionás in-game a <strong>Super Vegetto o Súper Gogeta</strong> con 4 barras de vida llenas.</p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="font-display font-bold text-sm text-rose-400">Abuso Competitivo (20 DP)</span>
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-500/15 text-rose-300">20 DP Exactos</span>
+            </div>
+            <p class="text-xs text-slate-300 font-medium">Gogeta SSJ4 (10) + Broly Base ➔ LSSJ (5) + Cell 1ra ➔ Perfecto (5)</p>
+            <p class="text-[11px] text-slate-400 mt-1">Ahorrás puntos eligiendo a Broly y Cell en su forma base y te transformás apenas arranca la pelea.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL "MODO HERMANO" (RESUMEN ULTRA RÁPIDO DE 30 SEGUNDOS) -->
+  <div id="brotherModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/40 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <span class="text-xs font-mono uppercase text-amber-400 font-bold">Para el que no quiere leer mucho jaja</span>
+          <h3 class="font-display font-bold text-2xl text-white">Machete de 30 Segundos</h3>
+        </div>
+        <button onclick="toggleBrotherModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs sm:text-sm text-slate-200">
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+          <div class="font-bold text-amber-400 mb-1">1. Cómo pegar combos largos sin que el otro salga volando</div>
+          No toques 5 veces <span class="ps-btn ps-sq !w-4 !h-4 !min-w-0 !text-[10px]">□</span> seguido. Tocá <span class="ps-btn ps-sq !w-4 !h-4 !min-w-0 !text-[10px]">□</span> 1, 2 o 3 veces y meté <span class="ps-btn ps-tr !w-4 !h-4 !min-w-0 !text-[10px]">△</span> para hacer un golpe especial que lo da vuelta o le dobla la panza, y <strong>seguí pegando con <span class="ps-btn ps-sq !w-4 !h-4 !min-w-0 !text-[10px]">□</span></strong>. ¡Nunca repitas el mismo <span class="ps-btn ps-tr !w-4 !h-4 !min-w-0 !text-[10px]">△</span> dos veces seguidas!
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+          <div class="font-bold text-rose-400 mb-1">2. Qué tocar cuando te están matando a piñas de espaldas</div>
+          Apretá dos veces rápido <span class="ps-btn ps-sh">L1</span> + <span class="ps-btn ps-sh">L1</span> (o <span class="ps-btn ps-sh">R3</span> si tu personaje tiene barrera). Tu personaje larga una onda explosiva que se saca al otro de encima al instante.
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+          <div class="font-bold text-sky-400 mb-1">3. Qué personajes elegir para ganar fácil</div>
+          Si jugamos libre: <strong>Gogeta SSJ4, Broly SSJ Legendario, Super Vegetto o Kid Buu</strong>. Todos pegan rapidísimo y tienen esquiva automática con <span class="ps-btn ps-ci !w-4 !h-4 !min-w-0 !text-[10px]">○</span> + <span class="ps-btn ps-sh">▲ Arriba</span> (<span class="ps-btn ps-sh">L2 + ○</span> en clásico).
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button onclick="toggleBrotherModal()" class="px-4 py-2 rounded-xl bg-dbz-orange text-slate-950 font-display font-bold text-sm uppercase tracking-wider cursor-pointer">
+          ¡Listo, a pelear!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST DE NOTIFICACIÓN -->
+  <div id="toastMsg" class="fixed bottom-5 right-5 z-50 hidden px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-semibold text-xs shadow-xl">
+    ¡Resumen copiado para mandar por WhatsApp!
+  </div>
+
+  <!-- LÓGICA Y BASE DE DATOS DE PERSONAJES BT3 USA -->
+  <script>
+    const FIGHTERS_DB = [
+      {
+        id: 'gogeta-ssj4',
+        name: 'Gogeta SSJ4',
+        subtitle: 'El Rey indiscutido del BT3',
+        tier: 'Z+',
+        dp: 10,
+        isMain: true,
+        isGod: true,
+        fullSet: false,
+        rush: [
+          { num: 1, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja rápido' },
+          { num: 2, name: 'Rolling Hammer', type: 'rh', effect: 'Da vuelta de espaldas' },
+          { num: 3, name: 'Heavy Finish', type: 'hf', effect: 'Aturde la panza' },
+          { num: 4, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja lejos' }
+        ],
+        optimalCombo: [
+          '□□ + △ (Rolling Hammer)',
+          '□□□ + △ (Heavy Finish)',
+          '□ + △ (Kiai Cannon)',
+          '✕ (Perseguir) + □□□ + ▲△ (Levantar)',
+          'Big Bang Kamehameha (L2 + △)'
+        ],
+        blast1: 'Wild Sense (2 Stocks: esquiva sola + contraataque)',
+        dirtyTrick: 'Sus manos son tan rápidas que si hacés □□□ + Paso corto (✕) en loop por la espalda, el rival casi no tiene frames para meter Z-Counter. Su Ultimate Attack carga ridículamente rápido.'
+      },
+      {
+        id: 'broly-lssj',
+        name: 'Broly (SSJ Legendario)',
+        subtitle: 'Tanque con Súper Armadura Natural',
+        tier: 'Z+',
+        dp: 9,
+        dpNote: '5 DP si arrancás en Base',
+        isMain: false,
+        isGod: true,
+        fullSet: false,
+        rush: [
+          { num: 1, name: 'Kiai Cannon', type: 'kc', effect: 'Onda gigante que aturde' },
+          { num: 2, name: 'Heavy Finish', type: 'hf', effect: 'Aturde la panza' },
+          { num: 3, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' },
+          { num: 4, name: 'Flying Kick', type: 'fk', effect: 'Patada brutal' }
+        ],
+        optimalCombo: [
+          '□□ + △ (Heavy Finish)',
+          '□ + △ (Kiai Cannon corto)',
+          '□□□□ + ▲△ (Lift Strike)',
+          '✕ + □□□□ + △ (Flying Kick)',
+          'Eraser Cannon (L2 + △)'
+        ],
+        blast1: 'Kakarot! (Full Power instantáneo + Buff de ataque)',
+        dirtyTrick: 'Tiene Súper Armadura pasiva: los personajes normales no lo hacen retroceder con golpes básicos ni ráfagas de Ki. En partidas por DP, elegilo en Base (cuesta solo 5 DP) y transformate al segundo 1.'
+      },
+      {
+        id: 'kid-buu',
+        name: 'Kid Buu',
+        subtitle: 'Tu Main • Hitbox chica y Regeneración',
+        tier: 'Z',
+        dp: 7,
+        isMain: true,
+        isGod: true,
+        fullSet: true,
+        rush: [
+          { num: 1, name: 'Rolling Hammer', type: 'rh', effect: 'Da vuelta en el 1er golpe' },
+          { num: 2, name: 'Heavy Finish', type: 'hf', effect: 'Aturde la panza' },
+          { num: 3, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' },
+          { num: 4, name: 'Flying Kick', type: 'fk', effect: 'Patada rápida' }
+        ],
+        optimalCombo: [
+          '□ + △ (Rolling Hammer rapidísimo)',
+          '□□ + △ (Heavy Finish)',
+          '□□□ + △ (Kiai Cannon)',
+          '✕ (Perseguir) + □□□□ + △ (Flying Kick)',
+          'Super Kamehameha (L2 + △)'
+        ],
+        blast1: 'Sleep (Cura 1.5 barras de vida y llena todo el Ki) + Instant Transmission',
+        dirtyTrick: 'Tener el Rolling Hammer en el 1er □+△ es una locura porque lo das vuelta apenas lo tocás. Si lo mandás lejos con un combo, tirá "Sleep": si no llega en 2 segundos, te curás gratis.'
+      },
+      {
+        id: 'super-vegetto',
+        name: 'Super Vegetto',
+        subtitle: 'Tu Main • Set Completo y Daño Top',
+        tier: 'Z',
+        dp: 9,
+        dpNote: '8 DP en Vegetto Base',
+        isMain: true,
+        isGod: true,
+        fullSet: true,
+        rush: [
+          { num: 1, name: 'Heavy Finish', type: 'hf', effect: 'Aturde en el 1er golpe' },
+          { num: 2, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' },
+          { num: 3, name: 'Rolling Hammer', type: 'rh', effect: 'Da vuelta de espaldas' },
+          { num: 4, name: 'Flying Kick', type: 'fk', effect: 'Ráfaga de patadas' }
+        ],
+        optimalCombo: [
+          '□□□ + △ (Rolling Hammer)',
+          '□ + △ (Heavy Finish)',
+          '□□ + △ (Kiai Cannon)',
+          '✕ (Perseguir) + □□□□ + △ (Flying Kick)',
+          'Final Kamehameha / Big Bang Attack'
+        ],
+        blast1: 'High Tension + Finish Sign (En Base tiene Afterimage Strike)',
+        dirtyTrick: 'Acordate que en Vegetto el Rolling Hammer está en el 3er golpe (□□□+△) y el Heavy Finish en el 1ro (□+△). Su espada de Ki (Spirit Sword) agarra incluso si el rival está cayendo.'
+      },
+      {
+        id: 'super-gogeta',
+        name: 'Súper Gogeta (Z)',
+        subtitle: 'Tu Main • El más fluido de encadenar',
+        tier: 'Z',
+        dp: 9,
+        isMain: true,
+        isGod: true,
+        fullSet: true,
+        rush: [
+          { num: 1, name: 'Rolling Hammer', type: 'rh', effect: 'Da vuelta al toque' },
+          { num: 2, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' },
+          { num: 3, name: 'Heavy Finish', type: 'hf', effect: 'Aturde la panza' },
+          { num: 4, name: 'Flying Kick', type: 'fk', effect: 'Patada múltiple' }
+        ],
+        optimalCombo: [
+          '□ + △ (Rolling Hammer)',
+          '□□□ + △ (Heavy Finish)',
+          '□□ + △ (Kiai Cannon)',
+          '✕ (Perseguir) + □□□□ + △ (Flying Kick)',
+          'Super Kamehameha / Punisher Drive'
+        ],
+        blast1: 'Wild Sense (Esquiva automática) + Instant Transmission',
+        dirtyTrick: 'Tiene el orden más cómodo de todo el juego junto con Kid Buu: □+△ ya lo da vuelta de espaldas y □□□+△ lo deja doblado del dolor. Si fusionás en pelea (Gokú Fin + Vegeta 2da forma), arranca con vida extra.'
+      },
+      {
+        id: 'perfect-cell',
+        name: 'Perfect Cell (Forma Perfecta)',
+        subtitle: 'El Rey de los Torneos Online',
+        tier: 'Z+',
+        dp: 7,
+        dpNote: '5 DP arrancando en 1ra Forma',
+        isMain: false,
+        isGod: true,
+        fullSet: true,
+        rush: [
+          { num: 1, name: 'Rolling Hammer', type: 'rh', effect: 'Da vuelta rápido' },
+          { num: 2, name: 'Heavy Finish', type: 'hf', effect: 'Aturde la panza' },
+          { num: 3, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' },
+          { num: 4, name: 'Flying Kick', type: 'fk', effect: 'Patada aérea' }
+        ],
+        optimalCombo: [
+          '□ + △ (Rolling Hammer)',
+          '□□ + △ (Heavy Finish)',
+          '□□□ + △ (Kiai Cannon)',
+          '✕ + □□□□ + △ (Flying Kick)',
+          'Barrage Death Beam (L2 + △)'
+        ],
+        blast1: 'Android Barrier (Corta cualquier combo rival) + Afterimage',
+        dirtyTrick: 'OJO: Usá a "Forma Perfecta" (el que se puede transformar), NO a "Super Perfecto". Esta versión tiene las 4 extensiones en orden 1-2-3-4 perfecto, Barrera Androide para zafar de combos de espaldas y el rayo de dedo más rápido del juego.'
+      },
+      {
+        id: 'super-baby-2',
+        name: 'Super Baby 2',
+        subtitle: 'Tu Main • Presión de Ki y Control de Zona',
+        tier: 'S+',
+        dp: 7,
+        isMain: true,
+        isGod: false,
+        fullSet: false,
+        rush: [
+          { num: 1, name: 'Heavy Finish', type: 'hf', effect: 'Aturde en el 1er golpe' },
+          { num: 2, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' },
+          { num: 3, name: 'Flying Kick', type: 'fk', effect: 'Patadas rápidas' },
+          { num: 4, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja lejos' }
+        ],
+        optimalCombo: [
+          '□ + △ (Heavy Finish al instante)',
+          '□□□ + ▼△ (Barrido bajo al piso)',
+          '□□ + △ (Kiai Cannon)',
+          '✕ (Perseguir) + □□□ + △ (Flying Kick)',
+          'Final Flash / Revenge Death Ball'
+        ],
+        blast1: 'Explosive Wave (Te salva de combos de espaldas) + High Tension',
+        dirtyTrick: 'No tiene Rolling Hammer, pero tiene Heavy Finish en el primer □+△ y discos de Ki destructores que persiguen al rival. Si te están encerrando, apretá R3 (Explosive Wave) o transformate en Ozaru Dorado para ganar Súper Armadura.'
+      },
+      {
+        id: 'teen-gohan-ssj2',
+        name: 'Gohan Adolescente SSJ2',
+        subtitle: 'Daño Explosivo y Velocidad Extrema',
+        tier: 'Z',
+        dp: 7,
+        dpNote: '4 DP si arrancás en Base',
+        isMain: false,
+        isGod: true,
+        fullSet: true,
+        rush: [
+          { num: 1, name: 'Rolling Hammer', type: 'rh', effect: 'Da vuelta rápido' },
+          { num: 2, name: 'Flying Kick', type: 'fk', effect: 'Patada veloz' },
+          { num: 3, name: 'Heavy Finish', type: 'hf', effect: 'Aturde la panza' },
+          { num: 4, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' }
+        ],
+        optimalCombo: [
+          '□ + △ (Rolling Hammer)',
+          '□□□ + △ (Heavy Finish)',
+          '□□□□ + △ (Kiai Cannon)',
+          '✕ + □□ + △ (Flying Kick)',
+          'Super Kamehameha (Sale instantáneo)'
+        ],
+        blast1: 'Explosive Wave (Sale de combos) + Unforgivable! (Full Power)',
+        dirtyTrick: 'Su bola de Ki cargada (mantener △) paraliza al rival. Además, su Super Kamehameha no tiene cinemática larga: entra garantizado después de cualquier golpe.'
+      },
+      {
+        id: 'trunks-fighting-ssj',
+        name: 'Trunks (Peleador) SSJ',
+        subtitle: 'El Rey del Burning Attack sin cinemática',
+        tier: 'S+',
+        dp: 6,
+        dpNote: '5 DP en Base',
+        isMain: false,
+        isGod: false,
+        fullSet: true,
+        rush: [
+          { num: 1, name: 'Heavy Finish', type: 'hf', effect: 'Aturde de entrada' },
+          { num: 2, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' },
+          { num: 3, name: 'Rolling Hammer', type: 'rh', effect: 'Da vuelta' },
+          { num: 4, name: 'Flying Kick', type: 'fk', effect: 'Patadas' }
+        ],
+        optimalCombo: [
+          '□□□ + △ (Rolling Hammer)',
+          '□ + △ (Heavy Finish)',
+          '□□ + △ (Kiai Cannon)',
+          '✕ + □□□□ + △ (Flying Kick)',
+          'Burning Attack (L2 + △)'
+        ],
+        blast1: 'Explosive Wave + Finish Sign',
+        dirtyTrick: 'El "Burning Attack" de este Trunks (el de pelo atado sin espada) sale en medio segundo sin cortar la cámara, así que es casi imposible de teletransportar en el online.'
+      },
+      {
+        id: 'burter',
+        name: 'Burter',
+        subtitle: 'La Velocidad de Gogeta SSJ4 por solo 5 DP',
+        tier: 'S+',
+        dp: 5,
+        isMain: false,
+        isGod: false,
+        fullSet: false,
+        rush: [
+          { num: 1, name: 'Rolling Hammer', type: 'rh', effect: 'Da vuelta al toque' },
+          { num: 2, name: 'Flying Kick', type: 'fk', effect: 'Ráfaga de patadas' },
+          { num: 3, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' },
+          { num: 4, name: 'Kiai Cannon', type: 'kc', effect: 'Empuja' }
+        ],
+        optimalCombo: [
+          '□ + △ (Rolling Hammer)',
+          '□□□□ + ▲△ (Lift Strike hacia arriba)',
+          '✕ + □□ + △ (Flying Kick)',
+          '□□□ + △ (Kiai Cannon)'
+        ],
+        blast1: 'Afterimage + High Speed Movement',
+        dirtyTrick: 'Por apenas 5 puntos de DP pega a la velocidad de la luz y tiene Rolling Hammer en el primer □+△. Ideal para abrir la partida y volver loco a un personaje caro del rival.'
+      }
+    ];
+
+    const DP_POOL = [
+      { name: 'Gogeta SSJ4', dp: 10 },
+      { name: 'Super Vegetto', dp: 9 },
+      { name: 'Súper Gogeta', dp: 9 },
+      { name: 'Vegetto Base', dp: 8 },
+      { name: 'Kid Buu', dp: 7 },
+      { name: 'Super Baby 2', dp: 7 },
+      { name: 'Cell (1ra Forma ➔ Perfecto)', dp: 5 },
+      { name: 'Broly (Base ➔ LSSJ)', dp: 5 },
+      { name: 'Gokú Fin Base', dp: 5 },
+      { name: 'Vegeta 2da Forma', dp: 5 },
+      { name: 'Burter', dp: 5 },
+      { name: 'Gohan Adol. (Base ➔ SSJ2)', dp: 4 },
+      { name: 'Androide 17', dp: 5 },
+      { name: 'Yajirobe (Semilla Senzu)', dp: 2 },
+      { name: 'Maestro Roshi Max Power', dp: 2 }
+    ];
+
+    let currentFilter = 'all';
+    let selectedTeam = [];
+
+    // Cambiar entre las 4 pestañas principales usando el estilo Dorado/Plateado de DB Legends
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('dbl-gold-btn');
+        btn.classList.add('dbl-silver-btn');
+      });
+
+      const activeBtn = document.getElementById('nav-' + tabId);
+      activeBtn.classList.remove('dbl-silver-btn');
+      activeBtn.classList.add('dbl-gold-btn');
+    }
+
+    // Formatear texto con íconos de botones de PS2
+    function formatButtons(str) {
+      return str
+        .replace(/□/g, '<span class="ps-btn ps-sq !w-5 !h-5 !min-w-0 !text-[11px] mx-0.5">□</span>')
+        .replace(/△/g, '<span class="ps-btn ps-tr !w-5 !h-5 !min-w-0 !text-[11px] mx-0.5">△</span>')
+        .replace(/✕/g, '<span class="ps-btn ps-cr !w-5 !h-5 !min-w-0 !text-[11px] mx-0.5">✕</span>')
+        .replace(/○/g, '<span class="ps-btn ps-ci !w-5 !h-5 !min-w-0 !text-[11px] mx-0.5">○</span>');
+    }
+
+    // Filtrar personajes con botones estilo DB Legends
+    function setFilter(filterType) {
+      currentFilter = filterType;
+      document.querySelectorAll('.filter-chip').forEach(chip => {
+        if (chip.dataset.filter === filterType) {
+          chip.className = 'filter-chip dbl-gold-btn px-3.5 py-2 text-xs font-display font-extrabold uppercase cursor-pointer shrink-0';
+        } else {
+          chip.className = 'filter-chip dbl-silver-btn px-3.5 py-2 text-xs font-display font-extrabold uppercase cursor-pointer shrink-0';
+        }
+      });
+      renderFighters();
+    }
+
+    // Colores de elemento estilo DB Legends (RED, YEL, PUR, BLU, GRN) para decorar cada carta
+    const ELEMENT_BADGES = {
+      'gogeta-ssj4': { label: 'RED', bg: 'bg-red-600 border-red-300' },
+      'broly-lssj': { label: 'GRN', bg: 'bg-emerald-600 border-emerald-300' },
+      'kid-buu': { label: 'PUR', bg: 'bg-purple-600 border-purple-300' },
+      'super-vegetto': { label: 'YEL', bg: 'bg-amber-500 border-yellow-200 text-black' },
+      'super-gogeta': { label: 'BLU', bg: 'bg-sky-600 border-sky-300' },
+      'perfect-cell': { label: 'YEL', bg: 'bg-amber-500 border-yellow-200 text-black' },
+      'super-baby-2': { label: 'BLU', bg: 'bg-sky-600 border-sky-300' },
+      'teen-gohan-ssj2': { label: 'RED', bg: 'bg-red-600 border-red-300' },
+      'trunks-fighting-ssj': { label: 'GRN', bg: 'bg-emerald-600 border-emerald-300' },
+      'burter': { label: 'BLU', bg: 'bg-sky-600 border-sky-300' }
+    };
+
+    // Renderizar tarjetas de personajes con estética SPARKING / LEGENDS LIMITED (Captura 2)
+    function renderFighters() {
+      const query = document.getElementById('searchFighter').value.toLowerCase().trim();
+      const grid = document.getElementById('fightersGrid');
+
+      const filtered = FIGHTERS_DB.filter(f => {
+        const matchesQuery = f.name.toLowerCase().includes(query) || f.subtitle.toLowerCase().includes(query) || f.dirtyTrick.toLowerCase().includes(query);
+        if (!matchesQuery) return false;
+        if (currentFilter === 'mains') return f.isMain;
+        if (currentFilter === 'god') return f.isGod;
+        if (currentFilter === 'fullset') return f.fullSet;
+        return true;
+      });
+
+      grid.innerHTML = filtered.map(f => {
+        const elBadge = ELEMENT_BADGES[f.id] || { label: 'YEL', bg: 'bg-amber-500 border-yellow-200 text-black' };
+        const rushBadges = f.rush.map(r => {
+          const squares = '□'.repeat(r.num);
+          return `
+            <div class="p-2 rounded-lg bg-black/85 border border-amber-500/30 flex items-center justify-between gap-2 shadow-inner">
+              <div class="flex items-center gap-1">
+                <span class="text-[11px] font-mono font-bold text-amber-400">${r.num}°</span>
+                <span class="text-xs font-mono font-bold text-pink-400 tracking-tighter">${squares}</span>
+                <span class="text-xs font-mono font-bold text-emerald-400">+△</span>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold ext-${r.type}">
+                ${r.name}
+              </span>
+            </div>
+          `;
+        }).join('');
+
+        const comboSteps = f.optimalCombo.map((step, idx) => `
+          <div class="flex items-center gap-1.5 text-xs bg-black/90 px-2.5 py-1.5 rounded-lg border border-amber-500/40">
+            <span class="text-[10px] font-mono text-amber-400 font-extrabold">${idx + 1}.</span>
+            <span class="text-slate-100 font-medium">${formatButtons(step)}</span>
+          </div>
+        `).join('');
+
+        return `
+          <article class="rounded-2xl dbl-card ${f.isMain ? 'dbl-card-main' : ''} flex flex-col justify-between transition">
+            <!-- Cinta superior dorada estilo LEGENDS LIMITED de la captura 2 -->
+            <div class="bg-gradient-to-r from-amber-500 via-yellow-300 to-amber-500 px-3 py-1 flex items-center justify-between border-b-2 border-black">
+              <div class="flex items-center gap-1.5">
+                <span class="px-1.5 py-0.2 rounded text-[10px] font-mono font-extrabold border ${elBadge.bg}">
+                  ${elBadge.label}
+                </span>
+                <span class="font-display font-extrabold text-[11px] uppercase tracking-widest text-black">
+                  ${f.isGod ? '★ LEGENDS LIMITED ★' : 'SPARKING FIGHTER'}
+                </span>
+              </div>
+              <span class="text-[11px] font-mono font-extrabold text-red-700 tracking-tighter">
+                ★★★★★★★
+              </span>
+            </div>
+
+            <div class="p-4 sm:p-5 space-y-3.5 halftone-gold flex-1 flex flex-col justify-between">
+              <div class="space-y-3.5">
+                <!-- Cabecera del personaje -->
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <h2 class="font-display font-extrabold italic text-xl sm:text-2xl uppercase tracking-wide db-comic-text">${f.name}</h2>
+                      ${f.isMain ? '<span class="px-2 py-0.5 rounded bg-gradient-to-r from-orange-500 to-amber-400 text-black text-[10px] font-display font-extrabold uppercase shadow">LEADER / MAIN</span>' : ''}
+                    </div>
+                    <p class="text-xs text-amber-100/80 font-medium">${f.subtitle}</p>
+                  </div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <span class="px-2.5 py-1 rounded bg-black/90 border border-emerald-400 font-mono text-xs text-emerald-400 font-extrabold shadow" title="Costo de Puntos de Destrucción">
+                      ${f.dp} DP
+                    </span>
+                    <span class="px-2.5 py-1 rounded bg-gradient-to-b from-yellow-300 via-amber-500 to-orange-600 text-black border border-yellow-100 font-display font-extrabold italic text-xs shadow">
+                      TIER ${f.tier}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Mapa de los 4 Triángulos -->
+                <div>
+                  <div class="text-[11px] font-display font-bold uppercase tracking-wider text-amber-300 mb-1.5 flex items-center justify-between">
+                    <span>Orden de Extensiones (□ + △):</span>
+                    ${f.fullSet ? '<span class="text-emerald-400 font-mono">★ SET 4 COMPLETO</span>' : ''}
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    ${rushBadges}
+                  </div>
+                </div>
+
+                <!-- Ruta de Combo Recomendada -->
+                <div>
+                  <div class="text-[11px] font-display font-extrabold uppercase tracking-wider text-yellow-300 mb-1.5">
+                    🔥 Ruta de Combo Confirmado (Sin repetir extensión):
+                  </div>
+                  <div class="flex flex-wrap gap-1.5">
+                    ${comboSteps}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Truco Sucio Online y Blast 1 -->
+              <div class="pt-3 mt-3 border-t border-amber-500/30 space-y-1.5 text-xs">
+                <div class="text-slate-200">
+                  <strong class="text-amber-400 uppercase font-display">Habilidad Clave (B1):</strong> ${f.blast1}
+                </div>
+                <div class="p-2.5 rounded-xl bg-black/80 border border-amber-500/40 text-amber-100 leading-relaxed">
+                  <strong class="text-yellow-400 uppercase font-display">⚡ Truco Online:</strong> ${f.dirtyTrick}
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // Poblar selector del simulador en la pestaña 2
+    function initComboSimulator() {
+      const select = document.getElementById('comboSelectFighter');
+      select.innerHTML = FIGHTERS_DB.map(f => `<option value="${f.id}">${f.name} (${f.dp} DP)</option>`).join('');
+      updateInteractiveCombo();
+    }
+
+    function updateInteractiveCombo() {
+      const id = document.getElementById('comboSelectFighter').value;
+      const fighter = FIGHTERS_DB.find(f => f.id === id) || FIGHTERS_DB[0];
+      const container = document.getElementById('interactiveComboDisplay');
+
+      const rh = fighter.rush.find(r => r.type === 'rh');
+      const hf = fighter.rush.find(r => r.type === 'hf');
+      const kc = fighter.rush.find(r => r.type === 'kc');
+
+      container.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800">
+          <span class="font-display font-bold text-base text-white">Secuencia de memoria muscular para <span class="text-dbz-orange">${fighter.name}</span>:</span>
+          <span class="text-xs text-slate-400">${rh ? `Lo das vuelta en el golpe #${rh.num}` : 'No tiene Rolling Hammer (arrancá con Heavy Finish)'}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          ${fighter.optimalCombo.map((step, i) => `
+            <div class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-dbz-orange/20 text-dbz-orange font-mono text-xs flex items-center justify-center font-bold">${i + 1}</span>
+              <span class="text-xs sm:text-sm font-medium text-white">${formatButtons(step)}</span>
+            </div>
+          `).join('<span class="text-slate-500 font-bold">➔</span>')}
+        </div>
+      `;
+    }
+
+    // Inicializar calculadora de DP en la pestaña 4
+    function initDpBuilder() {
+      const pool = document.getElementById('dpSelectorPool');
+      pool.innerHTML = DP_POOL.map((item, idx) => `
+        <button onclick="addDpMember(${idx})" class="px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-xs text-slate-200 flex items-center gap-1.5 transition cursor-pointer">
+          <span>+ ${item.name}</span>
+          <span class="px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-400 font-mono font-bold text-[10px]">${item.dp} DP</span>
+        </button>
+      `).join('');
+    }
+
+    function addDpMember(idx) {
+      if (selectedTeam.length >= 5) return;
+      selectedTeam.push(DP_POOL[idx]);
+      renderDpTeam();
+    }
+
+    function removeDpMember(teamIdx) {
+      selectedTeam.splice(teamIdx, 1);
+      renderDpTeam();
+    }
+
+    function clearTeam() {
+      selectedTeam = [];
+      renderDpTeam();
+    }
+
+    function renderDpTeam() {
+      const container = document.getElementById('dpCurrentTeam');
+      const counter = document.getElementById('dpCounter');
+      const total = selectedTeam.reduce((acc, item) => acc + item.dp, 0);
+
+      counter.textContent = `${total} / 15 DP (o 20 DP)`;
+      if (total <= 15) {
+        counter.className = 'font-mono font-bold text-lg text-emerald-400';
+      } else if (total <= 20) {
+        counter.className = 'font-mono font-bold text-lg text-amber-400';
+      } else {
+        counter.className = 'font-mono font-bold text-lg text-rose-400';
+      }
+
+      if (selectedTeam.length === 0) {
+        container.innerHTML = '<span class="text-xs text-slate-500">Tocá los personajes de arriba para sumarlos y medir tus puntos de DP...</span>';
+        return;
+      }
+
+      container.innerHTML = selectedTeam.map((m, i) => `
+        <div onclick="removeDpMember(${i})" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs flex items-center gap-2 cursor-pointer hover:border-rose-500/60" title="Click para quitar">
+          <span class="font-semibold text-white">${m.name}</span>
+          <span class="font-mono text-sky-400">${m.dp} DP</span>
+          <span class="text-rose-400 font-bold">×</span>
+        </div>
+      `).join('');
+    }
+
+    // Modal "Modo Hermano"
+    function toggleBrotherModal() {
+      const modal = document.getElementById('brotherModal');
+      modal.classList.toggle('hidden');
+    }
+
+    // Copiar machete en texto plano para WhatsApp
+    function copyShareText() {
+      const text = [
+        "🔥 *MACHETE RÁPIDO BT3 ONLINE* 🔥",
+        "",
+        "🥊 *1. Cómo no cortar el combo:*",
+        "No toques 5 veces Cuadrado porque lo mandás a volar. Intercalá Cuadrado + Triángulo sin repetir el mismo ataque especial:",
+        "• *Kid Buu / Súper Gogeta / Cell:* 1□+△ (Lo da vuelta) ➔ 2□ o 3□+△ (Aturde panza) ➔ Kiai Cannon.",
+        "• *Gogeta SSJ4:* 2□+△ (Lo da vuelta) ➔ 3□+△ (Aturde panza) ➔ 1□+△ (Kiai).",
+        "• *Super Vegetto:* 3□+△ (Lo da vuelta) ➔ 1□+△ (Aturde panza) ➔ 2□+△ (Kiai).",
+        "",
+        "🛡️ *2. Cómo salir cuando te pegan de espaldas:*",
+        "Tocá dos veces rápido *L1 + L1* (Onda de Emergencia) o *R3* si tenés personaje con Barrera/Explosive Wave.",
+        "",
+        "👑 *3. Los más rotos para elegir:*",
+        "Gogeta SSJ4, Broly LSSJ (tiene Súper Armadura), Perfect Cell (Forma Perfecta), Kid Buu, Super Vegetto y Gohan Adol. SSJ2."
+      ].join("\n");
+
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('toastMsg');
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 2800);
+      });
+    }
+
+    // Inicialización al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      switchTab('tab-fighters');
+      renderFighters();
+      initComboSimulator();
+      initDpBuilder();
+    });
+  </script>
+</body>
+</html>
