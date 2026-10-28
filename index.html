@@ -1,62 +1,212 @@
 <!DOCTYPE html>
 <html lang="es" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BT3 Online — Scouter & Guía de Combate</title>
-  <title>DBZ: Budokai Tenkaichi 3 (PS2) — Guía Competitiva & Combos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía Competitiva BT3 Online — Combos & Meta</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Chakra Petch', 'sans-serif'],
           },
           colors: {
             dbz: {
-              orange: '#FF7A00',
-              amber: '#FFC700',
-              gold: '#FFE600',
-              ki: '#38BDF8',
-              scouter: '#22C55E',
-              danger: '#F43F5E'
+              dark: '#121318',
+              panel: '#1a1d24',
+              card: '#20242d',
               gold: '#fbbf24',
               amber: '#f59e0b',
               orange: '#f97316',
               kame: '#ea580c',
-              ki: '#ef4444',
-              dark: '#121318',
-              panel: '#1a1d24'
+              red: '#ef4444',
+              silver: '#cbd5e1'
             }
           }
         }
+      }
     }
   </script>
   <style>
-    /* Fondo estilo Dragon Ball Legends: Carbono oscuro + Trama Halftone de Manga + Resplandor Dorado */
-    /* Fondo principal: Gris carbón / azul noche profundo (#121318 y #1a1d24) con trama halftone muy sutil */
     body {
       background-color: #121318;
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(255, 184, 0, 0.22), transparent 45%),
-        radial-gradient(circle at 15% 35%, rgba(255, 107, 0, 0.14), transparent 40%),
-        radial-gradient(rgba(255, 199, 0, 0.08) 1.5px, transparent 1.5px),
-        radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 16px 16px, 8px 8px;
-      background-position: 0 0, 0 0, 0 0, 4px 4px;
-        radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.14), transparent 50%),
-        radial-gradient(circle at 85% 20%, rgba(234, 88, 12, 0.10), transparent 45%),
-        radial-gradient(rgba(251, 191, 36, 0.045) 1px, transparent 1px),
-        linear-gradient(180deg, #121318 0%, #1a1d24 100%);
-      background-size: 100% 100%, 100% 100%, 14px 14px, 100% 100%;
-      background-attachment: fixed;
+        radial-gradient(circle at 18% 12%, rgba(249, 115, 22, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 82% 85%, rgba(251, 191, 36, 0.10) 0%, transparent 45%),
+        radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 16px 16px;
+      color: #f8fafc;
     }
-    /* Trama de puntos amarilla/naranja estilo cartel de Dokkan / Legends */
-    .halftone-gold {
-      background-color: #181612;
-    /* Superficie secundaria con trama halftone sutil */
-    .halftone-panel {
-      background-color: #1a1d24;
-      background-image: 
-        linear-gradient(135deg, rgba(255, 199, 0, 0.20) 0%, rgba(255, 107, 0, 0.06) 60%, rgba(18, 19, 24, 0.95) 100%),
-        radial-gradient(rgba(255, 199, 0, 0.22) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 10px 10px;
-        linear-gradient(135deg, rgba(251, 191, 36, 0.10) 0%, rgba(249, 115, 22, 0.04) 55%, rgba(18, 19, 24, 0.96) 100%),
-        radial-gradient(rgba(251, 191, 36, 0.08) 1.25px, transparent 1.25px);
+
+    /* Botones biselados estilo Dragon Ball Z / Arcade */
+    .btn-dbz-gold {
+      background: linear-gradient(180deg, #fde047 0%, #f59e0b 55%, #d97706 100%);
+      color: #111827;
+      border: 2px solid #fef08a;
+      box-shadow: 0 3px 0 #92400e, 0 6px 14px rgba(245, 158, 11, 0.25);
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: all 0.15s ease;
+    }
+    .btn-dbz-gold:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    .btn-dbz-silver {
+      background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      box-shadow: 0 3px 0 #0f172a;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: all 0.15s ease;
+    }
+    .btn-dbz-silver:hover {
+      border-color: #fbbf24;
+      color: #fbbf24;
+    }
+
+    /* Botones de PlayStation 2 */
+    .ps-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.65rem;
+      height: 1.65rem;
+      border-radius: 9999px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      background: #0f172a;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.5);
+      margin: 0 1px;
+      vertical-align: middle;
+    }
+    .ps-sq { color: #f472b6; border: 2px solid #ec4899; }
+    .ps-tr { color: #34d399; border: 2px solid #10b981; }
+    .ps-cr { color: #f87171; border: 2px solid #ef4444; }
+    .ps-x  { color: #60a5fa; border: 2px solid #3b82f6; }
+    .ps-sh {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.1rem 0.45rem;
+      border-radius: 0.35rem;
+      font-weight: 800;
+      font-size: 0.72rem;
+      background: #1e293b;
+      color: #fde047;
+      border: 1px solid #64748b;
+      margin: 0 1px;
+      vertical-align: middle;
+    }
+
+    .card-dbz {
+      background: linear-gradient(180deg, rgba(32, 36, 45, 0.95) 0%, rgba(22, 25, 32, 0.98) 100%);
+      border: 1px solid rgba(251, 191, 36, 0.22);
+      box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.6);
+    }
+    .card-dbz:hover {
+      border-color: rgba(249, 115, 22, 0.6);
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-14 selection:bg-orange-500 selection:text-white">
+
+  <!-- HEADER PRINCIPAL ESTILO DRAGON BALL Z -->
+  <header class="sticky top-0 z-30 bg-[#121318]/95 backdrop-blur-md border-b-2 border-amber-500/40 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600 flex items-center justify-center shadow-md border-2 border-yellow-200 font-display font-bold text-lg text-red-950">
+          ★★★★
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display font-bold text-xl sm:text-2xl tracking-wider uppercase bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-500 bg-clip-text text-transparent">
+              BT3 Online — Guía Competitiva
+            </h1>
+            <span class="hidden sm:inline-block text-[11px] font-extrabold uppercase px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-500/40">
+              PS2 / USA Original
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Combos universales, defensa avanzada y Top 10 personajes más rotos</p>
+        </div>
+      </div>
+
+      <!-- Botones para tu hermano -->
+      <div class="flex items-center gap-2">
+        <button onclick="toggleBroModal()" class="px-3.5 py-2 rounded-lg font-display font-bold text-xs sm:text-sm bg-gradient-to-r from-orange-600 to-amber-500 text-slate-950 hover:brightness-110 transition shadow-md flex items-center gap-1.5">
+          <span>⚡</span> Modo Hermano (Resumen 30s)
+        </button>
+        <button onclick="copyWhatsAppSummary()" id="copyBtn" class="px-3 py-2 rounded-lg font-semibold text-xs bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 transition">
+          📲 Copiar WA
+        </button>
+      </div>
+    </div>
+
+    <!-- NAVEGACIÓN POR PESTAÑAS -->
+    <div class="max-w-6xl mx-auto px-4 pt-1 pb-3 flex flex-wrap gap-2">
+      <button onclick="switchTab('combos')" id="tab-combos" class="tab-btn btn-dbz-gold px-4 py-2 font-display font-bold text-xs sm:text-sm uppercase tracking-wide">
+        1. Combos Generales (Básico a Pro)
+      </button>
+      <button onclick="switchTab('top10')" id="tab-top10" class="tab-btn btn-dbz-silver px-4 py-2 font-display font-bold text-xs sm:text-sm uppercase tracking-wide">
+        2. Top 10 Más Rotos
+      </button>
+      <button onclick="switchTab('defensa')" id="tab-defensa" class="tab-btn btn-dbz-silver px-4 py-2 font-display font-bold text-xs sm:text-sm uppercase tracking-wide">
+        3. Defensa & Z-Counter
+      </button>
+      <button onclick="switchTab('online')" id="tab-online" class="tab-btn btn-dbz-silver px-4 py-2 font-display font-bold text-xs sm:text-sm uppercase tracking-wide">
+        4. Reglas Online & Equipos DP
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pt-6">
+
+    <!-- ==========================================
+         PESTAÑA 1: COMBOS GENERALES (UNIVERSALES)
+         ========================================== -->
+    <section id="sec-combos" class="space-y-6">
+      <!-- Explicación del Sistema Universal -->
+      <div class="card-dbz rounded-xl p-5 border-l-4 border-l-amber-400">
+        <h2 class="font-display font-bold text-lg sm:text-xl text-amber-400 uppercase tracking-wide mb-2">
+          💡 Cómo funcionan los combos en BT3 (Sistema Universal)
+        </h2>
+        <p class="text-sm text-slate-300 leading-relaxed mb-4">
+          En <strong>Budokai Tenkaichi 3</strong> no tenés que memorizar combos distintos para cada uno de los 161 personajes. <strong>La estructura de combos es universal:</strong> todos encadenan golpes con <span class="ps-btn ps-sq">□</span> (del 1° al 4° impacto) y los extienden apretando <span class="ps-btn ps-tr">△</span>. Lo único que cambia entre un personaje y otro es en cuál de los cuatro golpes de <span class="ps-btn ps-sq">□</span> sale cada una de estas <strong>4 extensiones clave</strong>:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div class="bg-amber-500/10 border border-amber-500/40 rounded-lg p-3">
+            <span class="inline-block font-bold text-amber-300 uppercase mb-1">🔄 Rolling Hammer</span>
+            <p class="text-slate-300">Martillo giratorio que <strong>da vuelta al rival de espaldas</strong>. Es el mejor golpe del juego: de espaldas casi no pueden bloquear ni hacer Z-Counter.</p>
+          </div>
+          <div class="bg-red-500/10 border border-red-500/40 rounded-lg p-3">
+            <span class="inline-block font-bold text-red-400 uppercase mb-1">💥 Heavy Finish</span>
+            <p class="text-slate-300">Golpe pesado a la panza que <strong>deja al rival doblado y aturdido</strong> por más de un segundo. Permite seguir pegando o meter un poder limpio.</p>
+          </div>
+          <div class="bg-sky-500/10 border border-sky-500/40 rounded-lg p-3">
+            <span class="inline-block font-bold text-sky-400 uppercase mb-1">💨 Kiai Cannon</span>
+            <p class="text-slate-300">Empujón de viento que aturde a media distancia. Si después apretás <span class="ps-btn ps-x">✕</span> salís volando directo a seguir el combo.</p>
+          </div>
+          <div class="bg-purple-500/10 border border-purple-500/40 rounded-lg p-3">
+            <span class="inline-block font-bold text-purple-400 uppercase mb-1">🦵 Flying Kick</span>
+            <p class="text-slate-300">Ráfaga rápida de patadas que hace buen daño y termina mandando al rival lejos (ideal como último eslabón antes de tirar un poder).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- NIVEL 1: BÁSICOS -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-display font-bold text-xs uppercase">Nivel 1</span>
+          <h3 class="font-display font-bold text-lg text-white uppercase">Combos Básicos (Para asegurar daño rápido sin errar)</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="card-dbz rounded-xl p-4">
+            <h4 class="font-bold text-amber-300 text-sm mb-2">1. Combo Aéreo Clásico</h4>
+            <div class="bg-slate-900/90 p-3 rounded-lg border border-slate-800 text
